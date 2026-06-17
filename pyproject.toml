@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "urirdpedge"
+version = "0.1.0"
+description = "HTTP edge runtime composing rdp/kvm/him/ocr/llm packs for RDP desktop automation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+dependencies = [
+  "urisysedge>=0.1.0",
+  "urioperators>=0.1.0",
+  "urirdp>=0.1.0",
+  "urikvm>=0.1.0",
+  "urihim>=0.1.0",
+  "uriocr>=0.1.0",
+  "urillm[vision]>=0.1.0",
+  "urishell>=0.1.0",
+  "urienv>=0.1.0",
+  "uribrowser>=0.1.0",
+]
+
+[project.optional-dependencies]
+real = ["litellm>=1.40"]
+
+[tool.uv.sources]
+urisysedge = { path = "../urisysedge", editable = true }
+urioperators = { path = "../urioperators", editable = true }
+urirdp = { path = "../urirdp", editable = true }
+urikvm = { path = "../urikvm", editable = true }
+urihim = { path = "../urihim", editable = true }
+uriocr = { path = "../uriocr", editable = true }
+urillm = { path = "../urillm", editable = true }
+urishell = { path = "../urishell", editable = true }
+urienv = { path = "../urienv", editable = true }
+uribrowser = { path = "../uribrowser", editable = true }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["urirdpedge*"]
+
+[project.scripts]
+urisys-rdp = "urirdpedge.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
