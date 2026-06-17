@@ -12,6 +12,7 @@ from .runtime import build_runtime, load_json, load_urisys_env, run_flow
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="urisys-rdp")
     p.add_argument("--packs", default="rdp,kvm,him,ocr,llm,shell,env,browser")
+    p.add_argument("--bundle", default=None, help="UriBundle Markpact; packs are derived from its imported contracts.")
     p.add_argument("--config", default=os.environ.get("URISYS_CONFIG", "config/rdp-kvm-profile.json"))
     p.add_argument("--events", default="data/events.jsonl")
     sub = p.add_subparsers(dest="cmd", required=True)

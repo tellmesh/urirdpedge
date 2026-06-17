@@ -4,8 +4,11 @@ import json
 import os
 from typing import Any
 
+from urisysedge import compose
 from urisysedge.runtime import Runtime, load_json, run_flow, serve
 from urisysedge.env import load_urisys_env
+
+DEFAULT_PACKS = "rdp,kvm,him,ocr,llm,shell,env,browser"
 
 
 def _normalize_config(config: dict[str, Any]) -> dict[str, Any]:
@@ -31,56 +34,36 @@ def _register_lab_browser(runtime: Runtime) -> None:
     lab_browser.register(runtime)
 
 
-def _register_packs_on_runtime(rt: Runtime, packs: set[str]) -> None:
-    if "rdp" in packs:
-        import urirdp
-
-        urirdp.register(rt)
-    if "kvm" in packs:
-        import urikvm
-
-        urikvm.register(rt)
-    if "him" in packs:
-        import urihim
-
-        urihim.register(rt)
-    if "ocr" in packs:
-        import uriocr
-
-        uriocr.register(rt)
-    if "llm" in packs:
-        import urillm
-
-        urillm.register(rt)
-    if "shell" in packs:
-        import urishell
-
-        urishell.register(rt)
-    if "env" in packs:
-        import urienv
-
-        urienv.register(rt)
-    if "browser" in packs:
-        import uribrowserdocker
-
-        uribrowserdocker.register(rt)
-        _register_lab_browser(rt)
+def _lab_browser_extra(packs):
+    """The ``browser`` pack also needs the edge-local lab_browser routes."""
+    names = packs.split(",") if isinstance(packs, str) else list(packs or [])
+    names = {n.strip() for n in names}
+    if "browser" in names or "uribrowserdocker" in names:
+        return _register_lab_browser
+    return None
 
 
 def register_packs(rt: Runtime, *, packs: str | None = None, config: dict[str, Any] | None = None) -> None:
     """Register RDP desktop packs on an existing runtime (urisys-node hot-load)."""
     if config:
         rt.config.update(_normalize_config(config))
-    pack_set = set(filter(None, (packs or "rdp,kvm,him,ocr,llm,shell,env,browser").split(",")))
-    _register_packs_on_runtime(rt, pack_set)
+    names = packs or DEFAULT_PACKS
+    compose.register_packs(rt, names)
+    extra = _lab_browser_extra(names)
+    if extra is not None:
+        extra(rt)
 
 
 def build_runtime(args) -> Runtime:
     config = _normalize_config(load_json(getattr(args, "config", None)))
-    rt = Runtime(events_path=getattr(args, "events", "data/events.jsonl"), config=config)
-    packs = set(filter(None, (getattr(args, "packs", "rdp,kvm,him,ocr,llm,shell,env,browser") or "").split(",")))
-    _register_packs_on_runtime(rt, packs)
-    return rt
+    packs = getattr(args, "packs", DEFAULT_PACKS)
+    return compose.build_runtime(
+        packs=packs,
+        bundle=getattr(args, "bundle", None),
+        config=config,
+        events_path=getattr(args, "events", "data/events.jsonl"),
+        extra=_lab_browser_extra(packs),
+    )
 
 
 __all__ = ["Runtime", "build_runtime", "register_packs", "load_json", "run_flow", "serve", "load_urisys_env"]
