@@ -4,7 +4,7 @@ import argparse
 import json
 import os
 
-from urisysedge.http import serve as http_serve
+from uri_control.edge.http import serve as http_serve
 
 from .runtime import build_runtime, load_json, load_urisys_env, run_flow
 

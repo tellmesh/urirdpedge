@@ -4,9 +4,9 @@ import json
 import os
 from typing import Any
 
-from urisysedge import compose
-from urisysedge.runtime import Runtime, load_json, run_flow, serve
-from urisysedge.env import load_urisys_env
+from uri_control.edge.runtime import compose
+from uri_control.edge.runtime import Runtime, load_json, run_flow, serve
+from uri_control.edge.env import load_urisys_env
 
 DEFAULT_PACKS = "rdp,kvm,him,ocr,llm,shell,env,browser"
 

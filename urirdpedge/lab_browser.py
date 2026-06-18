@@ -9,7 +9,7 @@ import time
 from typing import Any
 
 from uribrowserdocker import handlers as browser_handlers
-from urisysedge.runtime import Runtime
+from uri_control.edge.runtime import Runtime
 
 
 def register(runtime: Runtime) -> None:
