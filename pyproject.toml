@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
 dependencies = [
-  "uricore>=0.1.8",
+  "uricontrol>=0.1.8",
   "urioperators>=0.1.0",
   "urirdp>=0.1.0",
   "urikvm>=0.1.0",
