@@ -1,6 +1,6 @@
 # urirdpedge
 
-HTTP edge CLI (`urisys-rdp`) for RDP desktop automation — composes standalone URI packs on `urisysedge.Runtime`.
+HTTP edge CLI (`urisys-rdp`) for RDP desktop automation — composes standalone URI packs on `uri_control.edge.Runtime``.
 
 ```bash
 urisys-rdp \
@@ -28,11 +28,28 @@ Lab browser aliases (`browser://{session}/page/open`, …) live in `urirdpedge.l
 
 ```text
 HTTP POST /uri/call
-  → urisysedge.http.serve
-  → urisysedge.Runtime
+  → uri_control.edge.http.serve
+  → `uri_control.edge.Runtime`
   → manifest-first packs (urirdp, urikvm, …)
 ```
 
 Docker demo: [`urirdp-docker`](../urirdp-docker/).
 
 Licensed under Apache-2.0.
+
+## Ekosystem TellMesh
+
+Orchestrator: **[urisys](https://github.com/tellmesh/urisys)** · Mapa: **[MESH.md](https://github.com/tellmesh/urisys/blob/main/docs/MESH.md)** · Model: **[ECOSYSTEM.md](https://github.com/tellmesh/urisys/blob/main/../docs/ECOSYSTEM.md)**
+
+| Pole | Wartość |
+|------|---------|
+| **Warstwa** | Edge CLI |
+| **CLI** | `urisys-rdp` |
+| **Runtime** | `uri_control.edge` (`uricore`) |
+| **Packi** | urirdp, urikvm, urihim, urishell, uribrowser, … |
+| **Port** | 8795 |
+
+Runtime edge: **`uri_control.edge`** w pakiecie **`uricore`** (legacy `urisysedge` usunięty 2026-06).
+Router intencji: **`urirouter`** (`uri_router`) — resolve + HTTP/MQTT delegate.
+
+<!-- end-ecosystem -->
